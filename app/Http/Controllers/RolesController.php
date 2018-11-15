@@ -6,7 +6,7 @@ use App\Role;
 
 use Illuminate\Support\Facades\Auth;
 use Webpatser\Uuid\Uuid;
-
+ 
 class RolesController extends Controller
 {
     /**

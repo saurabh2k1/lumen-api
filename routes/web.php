@@ -94,6 +94,7 @@ $router->group(
             $router->get('/{id}/roles', 'UserController@getUserRoles');
             $router->post('/{id}/roles/assign/{roleId}', 'UserController@assignRole');
             $router->post('/{id}/roles/revoke/{roleId}', 'UserController@revokeRole');
+            $router->get('/', 'UserController@getAllUsers');
         });
 
         /**

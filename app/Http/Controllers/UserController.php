@@ -48,6 +48,16 @@ class UserController extends Controller
     }
 
     /**
+     * Returns all users
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAllUsers()
+    {
+        return User::all();
+    }
+
+    /**
      * Update user in the system
      */
     public function updateUserByUUID(Request $request, $userId)
