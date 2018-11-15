@@ -1,6 +1,7 @@
 /vendor
 /.idea
 /.vscode
+/.keys
 Homestead.json
 Homestead.yaml
 .env

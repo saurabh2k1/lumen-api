@@ -45,7 +45,7 @@ class Users extends Seeder
             'created_by' => 1,
             'updated_by' => 1,
         ]);
-
+ 
         /**
          * It's important to only seed dev with this
          *
