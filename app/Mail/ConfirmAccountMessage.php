@@ -20,7 +20,7 @@ class ConfirmAccountMessage extends Mailable
         $url = url('/');
         $this->link = sprintf('%s/confirm/%s', $url, $user->confirm_code);
     }
-
+ 
     /**
      * Build the message.
      *
