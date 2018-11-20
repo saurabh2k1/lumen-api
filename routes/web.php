@@ -60,7 +60,7 @@ $router->group(
                 $router->post('/email', 'RegistrationController@registerEmail');
             }
         );
-
+ 
         /**
          * 10 Login and Logouts per minute
          */
@@ -95,6 +95,12 @@ $router->group(
             $router->post('/{id}/roles/assign/{roleId}', 'UserController@assignRole');
             $router->post('/{id}/roles/revoke/{roleId}', 'UserController@revokeRole');
             $router->get('/', 'UserController@getAllUsers');
+        });
+
+        $router->group(['prefix' => 'sites', 'middleware' => ['role:admin']], function () use ($router) {
+            // $router->get('/', 'SiteController@getSites');
+            $router->get('/', 'SiteController@getSiteWithUsers');
+            $router->post('/new', 'SiteController@createSite');
         });
 
         /**

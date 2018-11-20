@@ -6,6 +6,7 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use App\User;
 
 class AuthController extends BaseController
 {
@@ -15,7 +16,7 @@ class AuthController extends BaseController
      */
     public function postLogin(Request $req)
     {
-        $credentials = $req->only('username', 'password');
+        $credentials = $req->only('email', 'password');
 
         if ($token = $this->guard()->attempt($credentials)) {
             return $this->respondWithToken($token);
@@ -56,12 +57,14 @@ class AuthController extends BaseController
      */
     protected function respondWithToken($token)
     {
+        $userId = Auth::user()->_id;
         return response()->json([
-            '_id' => Auth::user()->_id,
+            '_id' => $userId,
             'jwt' => $token,
             'token_type' => 'bearer',
             'expires' => $this->guard()->factory()->getTTL() * 60,
             'user' => $this->guard()->user(),
+            //'user' => User::where('_id', $userId)->with('roles:id, name')->first(),
         ])->header('Authorization', sprintf('Bearer %s', $token));
     }
 

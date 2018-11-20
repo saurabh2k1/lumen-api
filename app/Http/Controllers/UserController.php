@@ -54,7 +54,11 @@ class UserController extends Controller
      */
     public function getAllUsers()
     {
-        return User::all();
+        return User::with(['roles' => function ($query){
+            $query->select('name');
+        }, 'site' => function($query){
+            $query->select('name');
+        }])->where('id', '!=', 1)->get();
     }
 
     /**

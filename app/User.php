@@ -49,6 +49,7 @@ class User extends BaseModel implements
         'password',
         'remember_token',
         'id',
+        'site_id',
         'created_by',
         'created_at',
         'updated_by',
@@ -104,6 +105,11 @@ class User extends BaseModel implements
     public function roles()
     {
         return $this->belongsToMany('App\Role', 'user_role')->using('App\UserRole')->withTimestamps();
+    }
+
+    public function site()
+    {
+        return $this->belongsTo('App\Site');
     }
 
 

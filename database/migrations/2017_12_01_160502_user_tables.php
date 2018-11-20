@@ -22,6 +22,7 @@ class UserTables extends Migration
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('email')->unique();
+            $table->unsignedBigInteger('site_id')->nullable();
             $table->boolean('is_banned')->default(false);
             $table->boolean('is_verified')->default(false);
             $table->uuid('confirm_code');
