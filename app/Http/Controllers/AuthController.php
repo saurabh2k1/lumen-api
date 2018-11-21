@@ -63,8 +63,8 @@ class AuthController extends BaseController
             'jwt' => $token,
             'token_type' => 'bearer',
             'expires' => $this->guard()->factory()->getTTL() * 60,
-            'user' => $this->guard()->user(),
-            //'user' => User::where('_id', $userId)->with('roles:id, name')->first(),
+            //'user' => $this->guard()->user(),
+            'user' => User::where('_id', $userId)->with('roles')->first(),
         ])->header('Authorization', sprintf('Bearer %s', $token));
     }
 

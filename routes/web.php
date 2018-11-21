@@ -103,6 +103,12 @@ $router->group(
             $router->post('/new', 'SiteController@createSite');
         });
 
+        $router->group(['prefix' => 'studies', ], function () use ($router) {
+            
+            $router->get('/', 'StudyController@getStudies');
+           
+        });
+
         /**
          * What you set this throttle to depends on your use case.
          * JWT refresh

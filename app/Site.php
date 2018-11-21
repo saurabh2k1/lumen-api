@@ -15,4 +15,9 @@ class Site extends BaseModel
         return $this->hasMany('App\User');
     }
 
+    public function studies()
+    {
+        return $this->belongsToMany('App\Study');
+    }
+
 }

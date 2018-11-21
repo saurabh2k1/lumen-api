@@ -39,7 +39,7 @@ class SiteController extends Controller
             dd($e);
             return response()->json(['error' => 'Site Creation Failed'], 403);
         }
-        
+         
     }
 
     /**
@@ -53,7 +53,7 @@ class SiteController extends Controller
 
     public function getSiteWithUsers()
     {
-        return response()->json(Site::with('users')->get());
+        return response()->json(Site::with('users', 'studies')->get());
     }
 }
 
