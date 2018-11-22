@@ -50,6 +50,7 @@ class User extends BaseModel implements
         'remember_token',
         'id',
         'site_id',
+        'role_id',
         'created_by',
         'created_at',
         'updated_by',
@@ -102,9 +103,10 @@ class User extends BaseModel implements
         return [];
     }
 
-    public function roles()
+    public function role()
     {
-        return $this->belongsToMany('App\Role', 'user_role')->using('App\UserRole')->withTimestamps();
+        // return $this->belongsToMany('App\Role', 'user_role')->using('App\UserRole')->withTimestamps();
+        return $this->belongsTo('App\Role');
     }
 
     public function site()
@@ -121,12 +123,15 @@ class User extends BaseModel implements
      */
     public function hasRole($roleId)
     {
-        foreach ($this->roles()->get() as $userRole) {
-            if ($userRole->_id === $roleId) {
-                return true;
-            }
-        }
-        return false;
+        // foreach ($this->roles()->get() as $userRole) {
+        //     if ($userRole->_id === $roleId) {
+        //         return true;
+        //     }
+        // }
+
+        $count = $this->where('role_id', $roleId)->count();
+        
+        return ($count > 0)? true: false;
     }
 
     /**

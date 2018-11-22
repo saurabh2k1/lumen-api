@@ -60,11 +60,15 @@ class AuthController extends BaseController
         $userId = Auth::user()->_id;
         return response()->json([
             '_id' => $userId,
-            'jwt' => $token,
+            'token' => $token,
             'token_type' => 'bearer',
             'expires' => $this->guard()->factory()->getTTL() * 60,
+            'first_name' => $this->guard()->user()->first_name,
+            'last_name' => $this->guard()->user()->last_name,
+            'email' => $this->guard()->user()->email,
+            'role' => $this->guard()->user()->role()->value('name'),
             //'user' => $this->guard()->user(),
-            'user' => User::where('_id', $userId)->with('roles')->first(),
+            // 'user' => User::where('_id', $userId)->with('role')->get(),
         ])->header('Authorization', sprintf('Bearer %s', $token));
     }
 

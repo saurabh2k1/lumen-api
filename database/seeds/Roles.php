@@ -58,43 +58,43 @@ class Roles extends Seeder
             'updated_by' => 1,
         ]);
 
-        if (app()->environment('local')) {
-            DB::table('user_role')->delete();
-        }
+        // if (app()->environment('local')) {
+        //     DB::table('user_role')->delete();
+        // }
 
         /**
          * Create relations between roles and users
          */
 
         // Assign user 3 as admin
-        UserRole::create([
-            'user_id' => 3,
-            'role_id' => 2,
-            'created_by' => 1,
-            'updated_by' => 1,
-        ]);
+        // UserRole::create([
+        //     'user_id' => 3,
+        //     'role_id' => 2,
+        //     'created_by' => 1,
+        //     'updated_by' => 1,
+        // ]);
 
-        // Assign system user to system role
-        UserRole::create([
-            'user_id' => 1,
-            'role_id' => 1,
-            'created_by' => 1,
-            'updated_by' => 1,
-        ]);
+        // // Assign system user to system role
+        // UserRole::create([
+        //     'user_id' => 1,
+        //     'role_id' => 1,
+        //     'created_by' => 1,
+        //     'updated_by' => 1,
+        // ]);
 
-        // Assign user 2 and 3 as users
-        UserRole::create([
-            'user_id' => 2,
-            'role_id' => 3,
-            'created_by' => 1,
-            'updated_by' => 1,
-        ]);
+        // // Assign user 2 and 3 as users
+        // UserRole::create([
+        //     'user_id' => 2,
+        //     'role_id' => 3,
+        //     'created_by' => 1,
+        //     'updated_by' => 1,
+        // ]);
 
-        UserRole::create([
-            'user_id' => 3,
-            'role_id' => 3,
-            'created_by' => 1,
-            'updated_by' => 1,
-        ]);
+        // UserRole::create([
+        //     'user_id' => 3,
+        //     'role_id' => 3,
+        //     'created_by' => 1,
+        //     'updated_by' => 1,
+        // ]);
     }
 }

@@ -23,10 +23,11 @@ class RolesMiddleware
             throw new \Exception('User not logged in.');
         }
 
-        if (!is_null($model) && $model->is_active && Auth::user()->hasRole($model->_id)) {
+        if (!is_null($model) && $model->is_active && Auth::user()->hasRole($model->id)) {
             return $next($request);
         }
 
         return response()->json(['error' => 'Incorrect Role'], 401);
     }
 }
+ 

@@ -54,9 +54,7 @@ class UserController extends Controller
      */
     public function getAllUsers()
     {
-        return User::with(['roles' => function ($query){
-            $query->select('name');
-        }, 'site'])->get();
+        return User::with(['role','site'])->get();
     }
 
     /**

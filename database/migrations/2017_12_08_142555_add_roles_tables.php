@@ -24,13 +24,13 @@ class AddRolesTables extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('user_role', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('role_id');
-            $table->unsignedBigInteger('created_by');
-            $table->unsignedBigInteger('updated_by');
-            $table->timestamps();
-        });
+        // Schema::create('user_role', function (Blueprint $table) {
+        //     $table->unsignedBigInteger('user_id');
+        //     $table->unsignedBigInteger('role_id');
+        //     $table->unsignedBigInteger('created_by');
+        //     $table->unsignedBigInteger('updated_by');
+        //     $table->timestamps();
+        // });
     }
 
     /**
@@ -41,6 +41,6 @@ class AddRolesTables extends Migration
     public function down()
     {
         Schema::dropIfExists('roles');
-        Schema::dropIfExists('user_role');
+       // Schema::dropIfExists('user_role');
     }
 }

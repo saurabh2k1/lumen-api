@@ -12,6 +12,7 @@ class Role extends BaseModel
 
     public function users()
     {
-        return $this->belongsToMany('App\User', 'user_role')->withTimestamps()->using('App\UserRole');
+        // return $this->belongsToMany('App\User', 'user_role')->withTimestamps()->using('App\UserRole');
+        return $this->hasMany('App\User');
     }
 }
