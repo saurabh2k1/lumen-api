@@ -16,28 +16,30 @@ use Webpatser\Uuid\Uuid;
 class RegistrationController extends BaseController
 {
     private $requiredFields = [
-        'username',
+        // 'username',
         'password',
-        'firstName',
-        'lastName',
+        'first_name',
+        'last_name',
         'email'
     ];
 
     public function registerEmail(Request $request)
     {
         $details = $request->only(
-            'username',
+            // 'username',
             'password',
-            'firstName',
-            'lastName',
-            'email'
+            'first_name',
+            'last_name',
+            'email',
+            'site_id',
+            'role_id'
         );
 
         $this->validate($request, [
-            'username' => 'required|string|unique:users',
-            'password' => 'required|string|min:8',
-            'firstName' => 'required|string',
-            'lastName' => 'required|string',
+            // 'username' => 'required|string|unique:users',
+            'password' => 'required|string|min:6',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
             'email' => 'required|email|distinct|unique:users',
         ]);
 
@@ -63,22 +65,27 @@ class RegistrationController extends BaseController
 
     private function createUser($details)
     {
+        $user = Auth::user();
+
         DB::beginTransaction();
 
         $newUser = User::create([
             '_id' => Uuid::generate(4),
             'api_key' => Uuid::generate(4),
-            'username' => $details['username'],
+            'username' => $details['first_name'] . $details['last_name'],
+            //$details['username'],
             'password' => Hash::make($details['password']),
-            'first_name' => $details['firstName'],
-            'last_name' => $details['lastName'],
+            'first_name' => $details['first_name'],
+            'last_name' => $details['last_name'],
             'email' => $details['email'],
-            'created_by' => 1,
-            'updated_by' => 1,
+            'site_id' => $details['site_id'],
+            'role_id' => $details['role_id'],
+            'created_by' => $user->id,
+            'updated_by' => $user->id,
             'confirm_code' => Uuid::generate(4)
         ]);
 
-        $this->addRole(Role::where('name', 'user')->first()->_id, $newUser);
+       // $this->addRole(Role::where('name', 'user')->first()->_id, $newUser);
         
         //Mail::to($details['email'])->send(new ConfirmAccountMessage($newUser));
 

@@ -95,17 +95,23 @@ $router->group(
             $router->post('/{id}/roles/assign/{roleId}', 'UserController@assignRole');
             $router->post('/{id}/roles/revoke/{roleId}', 'UserController@revokeRole');
             $router->get('/', 'UserController@getAllUsers');
+
+            
         });
 
         $router->group(['prefix' => 'sites', 'middleware' => ['role:admin']], function () use ($router) {
             // $router->get('/', 'SiteController@getSites');
             $router->get('/', 'SiteController@getSiteWithUsers');
             $router->post('/new', 'SiteController@createSite');
+            $router->get('/{id}/studies', 'SiteController@getSiteStudies');
+
         });
 
-        $router->group(['prefix' => 'studies', ], function () use ($router) {
+        $router->group(['prefix' => 'studies', 'middleware' => ['role:admin'] ], function () use ($router) {
             
             $router->get('/', 'StudyController@getStudies');
+            $router->post('/new', 'StudyController@createStudy');
+            
            
         });
 
@@ -120,7 +126,7 @@ $router->group(
         /**
          * Authenticated Routes
          */
-        $router->group(['prefix' => 'api', 'middleware' => ['auth:api', 'throttle']], function () use ($router) {
+        $router->group(['prefix' => 'api', 'middleware' => [ 'throttle']], function () use ($router) {
             $router->get('/', function () use ($router) {
                 return $router->app->version();
             });
@@ -132,6 +138,7 @@ $router->group(
             $router->post('/users/change-password', 'UserController@changePassword');
             $router->get('/users/{userId}', 'UserController@getUserById');
             $router->post('/users/{userId}', 'UserController@updateUserByUUID');
+            $router->get('/site', 'UserController@getUserSite');
         });
     }
 );

@@ -128,7 +128,7 @@ class UserController extends Controller
 
         return response('OK', 200);
     }
-
+ 
     /**
      * Get the roles of a user
      *
@@ -139,6 +139,11 @@ class UserController extends Controller
     {
         $user = User::loadFromUuid($userId);
         return $user->roles;
+    }
+
+    public function getUserSite(){
+        $user = Auth::user();
+        return response()->json($user->site()->get(['id', 'name']));
     }
 
     /**

@@ -28,7 +28,7 @@ class RolesController extends Controller
      */
     public function getRoles()
     {
-        return Role::all();
+        return response()->json(Role::where('id', '!=', 1)->get());
     }
 
 

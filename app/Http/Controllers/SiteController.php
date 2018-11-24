@@ -18,6 +18,7 @@ class SiteController extends Controller
      */
     public function createSite(Request $request)
     {
+        $user = Auth::user();
         $this->validate($request, [
             'name' => 'required|string|unique:sites',
             'code' => 'required',
@@ -31,8 +32,8 @@ class SiteController extends Controller
                 'department' => $request['department'],
                 'contact_person' => $request['contact_person'],
                 'address' => $request['address'],
-                'created_by' => 1,
-                'updated_by' => 1,
+                'created_by' => $user->id,
+                'updated_by' => $user->id,
                 ]);
             return response()->json(['_id' => $newSite->_id->string], 201);
         } catch (\Exception $e) {
@@ -51,9 +52,22 @@ class SiteController extends Controller
         return response()->json(Site::all());
     }
 
+
+    public function getSiteStudies($siteId){
+        $site = Site::where('id', $siteId)->first();
+        return response()->json($site->studies()->get());
+    }
+
     public function getSiteWithUsers()
     {
         return response()->json(Site::with('users', 'studies')->get());
+    }
+
+    public function getMySite()
+    {
+        $siteId = Auth::user()->site()->get(['id', 'name']);
+        //$siteDetails = Site::where('id', $siteId)->get();
+        return response()->json($siteId);
     }
 }
 
