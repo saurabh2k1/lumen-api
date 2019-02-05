@@ -11,9 +11,19 @@ class Study extends BaseModel
     use SoftDeletes;
     protected $dates = ['deleted_at'];
     protected $fillable = [ 'name', 'description', 'status', 'created_by', 'updated_by'];
-
+    protected $hidden = ['id'];
     public function sites(){
         return $this->belongsToMany('App\Site', 'site_study')->using('App\SiteStudy')->withTimestamps();
+    }
+
+    public function patients()
+    {
+        return $this->hasMany('App\Patient');
+    }
+
+    public function visits()
+    {
+        return $this->hasMany('App\Visit');
     }
 
     public function hasSite($siteId) {

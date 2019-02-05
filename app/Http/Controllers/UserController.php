@@ -146,6 +146,7 @@ class UserController extends Controller
         return response()->json($user->site()->get(['id', 'name']));
     }
 
+    
     /**
      * Assign a new role to a user
      *

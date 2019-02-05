@@ -9,6 +9,7 @@ class Site extends BaseModel
 
     protected $fillable = ['_id', 'name', 'code', 'department', 'contact_person', 'address'];
     protected $dates = ['deleted_at'];
+    protected $hidden = ['id'];
 
     public function users()
     {
@@ -19,5 +20,11 @@ class Site extends BaseModel
     {
         return $this->belongsToMany('App\Study');
     }
+
+    public function patients()
+    {
+        return $this->hasMany('App\Patient');
+    }
+    
 
 }

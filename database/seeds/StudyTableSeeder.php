@@ -23,7 +23,9 @@ class StudyTableSeeder extends Seeder
 
         Study::create([
             'id' => 1,
+            '_id' => Uuid::generate(4),
             'name' => 'Vivinex Study',
+            'code' => 'VIOL-IND-001-PMCF',
             'created_by' => 1,
             'updated_by' => 1,
         ]);
@@ -36,19 +38,64 @@ class StudyTableSeeder extends Seeder
             'id' => 1,
             '_id' => Uuid::generate(4),
 
-            'name' => 'Site 1',
-            'code' => 'VS1',
-            'address' => 'Shahdara, Delhi - 110032',
+            'name' => 'Aravind Eye Hospital',
+            'code' => '001',
+            'address' => '1, Anna Nagar, Madhuri-625020
+            Tamil Nadu, India',
+            'contact_person' => 'Dr. Madhu Shekhar',
             'created_by' => 1,
             'updated_by' => 1,
         ]);
 
+        Site::create([
+            'id' => 2,
+            '_id' => Uuid::generate(4),
+
+            'name' => 'LV Prasad Eye Institute',
+            'code' => '002',
+            'address' => 'Kallam Anji Reddy Campus, 
+            LV Prasad Marg, Banjara Hills, 
+            Hyderabad-500 034
+            Telangana, India',
+            'contact_person' => 'Dr. Jagadesh C. Reddy',
+            'created_by' => 1,
+            'updated_by' => 1,
+        ]);
+
+        Site::create([
+            'id' => 3,
+            '_id' => Uuid::generate(4),
+
+            'name' => 'Laxmi Eye Institute',
+            'code' => '003',
+            'address' => 'Uran Road, Panvel, 
+            Navi Mumbai-40206, Maharashtra, India',
+            'contact_person' => 'Dr. Suhas Haldipurkar',
+            'created_by' => 1,
+            'updated_by' => 1,
+        ]);
+
+
         if (app()->environment('local')) {
-            DB::table('user_role')->delete();
+            DB::table('site_study')->delete();
         }
 
         SiteStudy::create([
             'site_id' => 1,
+            'study_id' => 1,
+            'created_by' => 1,
+            'updated_by' => 1,
+        ]);
+
+        SiteStudy::create([
+            'site_id' => 2,
+            'study_id' => 1,
+            'created_by' => 1,
+            'updated_by' => 1,
+        ]);
+
+        SiteStudy::create([
+            'site_id' => 3,
             'study_id' => 1,
             'created_by' => 1,
             'updated_by' => 1,

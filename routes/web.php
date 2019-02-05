@@ -22,6 +22,9 @@ use Illuminate\Support\Facades\Auth;
  *
  * Feel free to add/edit/remove Middlewares
  */
+
+ 
+
 $router->group(
     [
         'prefix' => '',
@@ -34,6 +37,28 @@ $router->group(
      *
      * Different routes have different combinations based on use case.
      */
+
+    // $router->get('site/{id}/studies', 'SiteController@getSiteStudies');
+    $router->get('/site/{siteId}/{studyId}/dashboard', 'SiteController@getDashboard');
+    $router->get('/patients', 'PatientController@getAll');
+    $router->get('/patient/{id}', 'PatientController@getPatient');
+    $router->post('/patient/update/{id}', 'PatientController@update');
+    $router->get('/patients/{siteID}/{studyID}', 'PatientController@getPatients');
+    $router->post('/patient/new', 'PatientController@new');
+    $router->get('/visits', 'VisitController@getAll');
+    $router->get('/visits/{studyID}', 'VisitController@getVisits');
+    $router->post('visit/new', 'VisitController@new');
+    $router->get('/visit/{id}', 'VisitController@getVisit');
+    $router->post('/visit/update/{id}', 'VisitController@updateVisit');
+    $router->post('form/new', 'FormController@new');
+    $router->get('form/{id}', 'FormController@get');
+    $router->post('form/{id}/field', 'CrfFormController@new');
+    $router->get('forms/{id}', 'FormController@getAllForms');
+    $router->post('/site/form/exclusion', 'SiteFormController@saveExclusion');
+    $router->get('/site/form/exclusion/{id}', 'SiteFormController@getExclusion');
+    $router->get('/site/patient/{id}/visits', 'VisitController@getVisitByPatient');
+    
+
 
         /**
          *  Ensures that retrieving config is allowed with the correct app id
@@ -103,8 +128,7 @@ $router->group(
             // $router->get('/', 'SiteController@getSites');
             $router->get('/', 'SiteController@getSiteWithUsers');
             $router->post('/new', 'SiteController@createSite');
-            $router->get('/{id}/studies', 'SiteController@getSiteStudies');
-
+            
         });
 
         $router->group(['prefix' => 'studies', 'middleware' => ['role:admin'] ], function () use ($router) {
@@ -126,7 +150,7 @@ $router->group(
         /**
          * Authenticated Routes
          */
-        $router->group(['prefix' => 'api', 'middleware' => [ 'throttle']], function () use ($router) {
+        $router->group(['prefix' => 'api', 'middleware' => ['auth']], function () use ($router) {
             $router->get('/', function () use ($router) {
                 return $router->app->version();
             });
@@ -138,7 +162,10 @@ $router->group(
             $router->post('/users/change-password', 'UserController@changePassword');
             $router->get('/users/{userId}', 'UserController@getUserById');
             $router->post('/users/{userId}', 'UserController@updateUserByUUID');
-            $router->get('/site', 'UserController@getUserSite');
+            // $router->get('/site', 'UserController@getUserSite');
+            $router->get('/site', 'SiteController@getMySite');
+            $router->get('/site/studies', 'SiteController@getSiteStudy');
+            
         });
     }
 );

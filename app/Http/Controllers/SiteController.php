@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Site;
+use App\Study;
+use App\Patient;
 use App\ValidationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -53,21 +55,40 @@ class SiteController extends Controller
     }
 
 
-    public function getSiteStudies($siteId){
-        $site = Site::where('id', $siteId)->first();
-        return response()->json($site->studies()->get());
-    }
+   public function getSiteStudy()
+   {
+       $siteId = Auth::user()->site()->value('id');
+       $site = Site::find($siteId)->studies()->get();
+       return response()->json($site);
+   }
 
     public function getSiteWithUsers()
     {
         return response()->json(Site::with('users', 'studies')->get());
     }
 
+    
     public function getMySite()
     {
-        $siteId = Auth::user()->site()->get(['id', 'name']);
-        //$siteDetails = Site::where('id', $siteId)->get();
-        return response()->json($siteId);
+        $user = Auth::user();
+        return response()->json($user->site()->get(['_id', 'name']));
+        
+    }
+
+    public function getDashboard($siteId, $studyId)
+    {
+        $siteId = Site::where('_id', $siteId)->value('id');
+        $studyId = Study::where('_id', $studyId)->value('id');
+        // $site = Site::where('_id', $id)->withCount('patients')->first();
+        $patCount = Patient::where('site_id', $siteId)->where('study_id', $studyId)->count(); 
+        $res = array("pat_count" => $patCount);
+        return response()->json($res);
+    }
+
+    private function getUserSite()
+    {
+        $user = Auth::user();
+        return $user->site()->value('id');
     }
 }
 
