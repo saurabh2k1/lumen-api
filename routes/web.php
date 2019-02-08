@@ -52,6 +52,8 @@ $router->group(
     $router->post('/visit/update/{id}', 'VisitController@updateVisit');
     $router->post('form/new', 'FormController@new');
     $router->get('form/{id}', 'FormController@get');
+    $router->get('form/crf/{id}', 'FormController@getForm');
+    $router->post('form/crf', 'FormController@saveCRF');
     $router->post('form/{id}/field', 'CrfFormController@new');
     $router->get('forms/{id}', 'FormController@getAllForms');
     $router->post('/site/form/exclusion', 'SiteFormController@saveExclusion');
