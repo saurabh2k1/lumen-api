@@ -22,7 +22,7 @@ class AuthController extends BaseController
             return $this->respondWithToken($token);
         }
 
-        return response('Unauthorized.', 401);
+        return response('Unauthorized.', 400);
     }
 
     /**
