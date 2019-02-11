@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 use App\ValidationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,7 @@ use App\Site;
 use App\Study;
 use App\Visit;
 use App\Form;
+use App\User;
 use App\CrfForm;
 use Carbon\Carbon;
 use Illuminate\Validation\Validator;
@@ -54,8 +56,19 @@ class FormController extends Controller
 
     public function getForm($id)
     {
-        $forms = Form::where('_id', $id)->with(['study', 'visits'])->first();
+        $input = Input::only('site_id', 'subject_id', 'visit_id');
+        $forms = Form::where('_id', $id)->first();
+        $siteId =  Site::where('_id', $input['site_id'])->value('id');
+        $subjectId = Patient::where('_id', $input['subject_id'])->value('id');
+        $visitId = Visit::where('_id', $input['visit_id'])->value('id');
         if($forms){
+            
+            $formValue = DB::table('crf_form_' . $forms->id)->where('site_id', $siteId)->where('visit_id', $visitId)->where('subject_id', $subjectId)->first();
+            if($formValue){
+                $user = User::find($formValue->created_by );
+                $formValue->created_by = $user->first_name . " " . $user->last_name;
+                $forms['value'] = $formValue;
+            }
             $fields = CrfForm::where('form_id', $forms->id)->with(['options'])->get();
             $formFields = array();
             foreach ($fields as $field) {
@@ -110,6 +123,7 @@ class FormController extends Controller
             $fbutton['label'] = 'Save';
             array_push($formFields, $fbutton);
             $forms['fields'] = $formFields;
+
             return response()->json($forms);
         }
 
