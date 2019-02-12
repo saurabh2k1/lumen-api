@@ -31,3 +31,4 @@ class ConfirmAccountMessage extends Mailable
         return $this->view('mail.confirmaccount');
     }
 }
+ 

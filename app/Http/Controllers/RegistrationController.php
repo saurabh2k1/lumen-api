@@ -34,7 +34,7 @@ class RegistrationController extends BaseController
             'site_id',
             'role_id'
         );
-
+        $password = Hash::make(str_random(8));
         $this->validate($request, [
             // 'username' => 'required|string|unique:users',
             'password' => 'required|string|min:6',
@@ -42,7 +42,7 @@ class RegistrationController extends BaseController
             'last_name' => 'required|string',
             'email' => 'required|email|distinct|unique:users',
         ]);
-
+ 
         $this->checkHasMinimum($details);
 
         try {
@@ -65,7 +65,7 @@ class RegistrationController extends BaseController
 
     private function createUser($details)
     {
-        $user = Auth::user();
+        // $user = Auth::user();
 
         DB::beginTransaction();
 
@@ -87,7 +87,7 @@ class RegistrationController extends BaseController
 
        // $this->addRole(Role::where('name', 'user')->first()->_id, $newUser);
         
-        //Mail::to($details['email'])->send(new ConfirmAccountMessage($newUser));
+        Mail::to($details['email'])->send(new ConfirmAccountMessage($newUser));
 
         DB::commit();
 
