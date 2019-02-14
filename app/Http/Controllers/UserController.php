@@ -105,7 +105,7 @@ class UserController extends Controller
     public function changePassword(Request $request)
     {
         $this->validate($request, [
-            'username' => 'required|string',
+            'email' => 'required|email',
             'password' => 'required|string',
             'newpassword' => 'required|string|different:password',
         ]);
@@ -116,7 +116,7 @@ class UserController extends Controller
             throw new \Exception('There was a problem changing the password.');
         }
 
-        $user = User::where('username', $fields['username'])->first();
+        $user = User::where('email', $fields['email'])->first();
 
         if (!Hash::check($request['password'], $user->password)) {
             throw new \Exception('There was a problem changing the password.');

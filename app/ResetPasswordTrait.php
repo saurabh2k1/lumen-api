@@ -92,7 +92,7 @@ trait ResetPasswordTrait
      */
     public function reset(Request $request)
     {
-        $this->validate($request, $this->getResetValidationRules());
+        // $this->validate($request, $this->getResetValidationRules());
 
         $credentials = $request->only('email', 'password', 'password_confirmation', 'token');
 
@@ -138,7 +138,7 @@ trait ResetPasswordTrait
 
         $user->save();
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true],201);
     }
 
     /**
@@ -148,7 +148,7 @@ trait ResetPasswordTrait
      */
     protected function getResetSuccessResponse()
     {
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true],201);
     }
 
     /**
@@ -158,7 +158,7 @@ trait ResetPasswordTrait
      */
     protected function getResetFailureResponse()
     {
-        return response()->json(['success' => false]);
+        return response()->json(['success' => false], 401);
     }
 
     /**
