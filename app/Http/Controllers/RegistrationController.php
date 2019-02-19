@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\User;
 use App\Role;
+use App\Site;
 use Webpatser\Uuid\Uuid;
 
 class RegistrationController extends BaseController
@@ -34,7 +35,9 @@ class RegistrationController extends BaseController
             'site_id',
             'role_id'
         );
-        $password = Hash::make(str_random(8));
+
+        $details['site_id'] = Site::where('_id', $details['site_id'])->value('id');
+        
         $this->validate($request, [
             // 'username' => 'required|string|unique:users',
             'password' => 'required|string|min:6',
@@ -66,8 +69,8 @@ class RegistrationController extends BaseController
     private function createUser($details)
     {
         // $user = Auth::user();
-
-        DB::beginTransaction();
+        $db = new DB();
+        $db->beginTransaction();
 
         $newUser = User::create([
             '_id' => Uuid::generate(4),
