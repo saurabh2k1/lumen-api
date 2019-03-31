@@ -41,6 +41,7 @@ class SiteFormController extends BaseController
                     'reason' =>  $request['reason'],
                     'isUpdated' => $request['isUpdated'],
                     'created_by' => $user->id,
+                    'visit_id' => 1,
                 ]);
                 return response()->json(['form' => $exclusion], 201);
         } catch (\Exception $e) {

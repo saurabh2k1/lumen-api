@@ -27,6 +27,11 @@ class Patient extends BaseModel
         return $this->belongsTo('App\Study');
     }
 
+    public function audits()
+    {
+        return $this->hasMany('App\PatientAudit');
+    }
+
     public function exclusion()
     {
         return $this->hasOne('App\CrfExclusion');

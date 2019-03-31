@@ -59,7 +59,7 @@ $router->group(
     $router->post('/site/form/exclusion', 'SiteFormController@saveExclusion');
     $router->get('/site/form/exclusion/{id}', 'SiteFormController@getExclusion');
     $router->get('/site/patient/{id}/visits', 'VisitController@getVisitByPatient');
-    
+    $router->get('/allstudies', 'StudyController@getAllStudies');
 
 
         /**

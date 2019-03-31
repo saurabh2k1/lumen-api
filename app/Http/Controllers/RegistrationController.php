@@ -68,9 +68,9 @@ class RegistrationController extends BaseController
 
     private function createUser($details)
     {
-        // $user = Auth::user();
-        $db = new DB();
-        $db->beginTransaction();
+        $user = Auth::user();
+       
+        // DB::beginTransaction();
 
         $newUser = User::create([
             '_id' => Uuid::generate(4),
@@ -90,9 +90,9 @@ class RegistrationController extends BaseController
 
        // $this->addRole(Role::where('name', 'user')->first()->_id, $newUser);
         
-        Mail::to($details['email'])->send(new ConfirmAccountMessage($newUser));
+        // Mail::to($details['email'])->send(new ConfirmAccountMessage($newUser));
 
-        DB::commit();
+        // DB::commit();
 
         return $newUser->_id->string;
     }

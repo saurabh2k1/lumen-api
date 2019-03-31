@@ -17,6 +17,10 @@ class StudyController extends Controller
     {
         return response()->json(Study::with('sites')->get());
     }
+    public function getAllStudies()
+    {
+        return response()->json(Study::all());
+    }
 
     public function createStudy(Request $request) {
         

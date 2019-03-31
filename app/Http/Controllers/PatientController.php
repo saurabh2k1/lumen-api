@@ -9,6 +9,7 @@ use Webpatser\Uuid\Uuid;
 use App\Patient;
 use App\Site;
 use App\Study;
+use App\PatientAudit;
 use Carbon\Carbon;
 
 
@@ -31,7 +32,7 @@ class PatientController extends Controller
 
     public function getPatient($id)
     {
-        return response()->json(Patient::where('_id', $id)->first());
+        return response()->json(Patient::where('_id', $id)->with(['audits'])->first());
     }
 
     public function getPatients($siteID, $studyID)
@@ -64,6 +65,7 @@ class PatientController extends Controller
             'prefix' => $this->getPrefix($studyId, $siteId ),
             'created_by' => $user->id,
             'updated_by' => $user->id,
+            'reason' => $user->reason,
             ]);
             return response()->json(['id' => $newPat->_id], 201);
         } catch (\Exception $e) {
@@ -74,28 +76,37 @@ class PatientController extends Controller
 
     public function update(Request $request, $id)
     {
-        // $siteId = Site::where('_id', $request['site_id'])->value('id');
-        // $studyId = Study::where('_id', $request['study_id'])->value('id');
+        
         $user = Auth::user();
-        try {
-            $newPat = Patient::where('_id', $id)->update([
-            
-            // 'study_id' => $studyId,
-            // 'site_id' => $siteId,
-            'initials' => $request['initials'],
-            'dob' => $request['dob'],
-            'gender' => $request['gender'],
-            'race' => $request['race'],
-            'icf' => $request['icf'],
-            'icf_date' => $request['icf_date'],
-            'status' => 0,
-            'updated_by' => $user->id,
+        $updatedFields = array();
+        $input = $request->all();
+        $oldPat = Patient::where('_id', $id)->first();
+        if (!$oldPat) {
+            return response()->json(['error' => 'Patient not found'], 404);
+        }
+
+        foreach ($input as $key => $value) {
+            $updatedFields[$key] = $value;
+            $oldValue = $oldPat[$key];
+            PatientAudit::create([
+                'patient_id' => $oldPat->id,
+                'field' => $key,
+                'old_value' => $oldValue,
+                'new_value' => $value,
+                'updated_by' => $user->id,
             ]);
+        }
+        $updatedFields['updated_by'] = $user->id;
+        $updatedFields['isUpdated'] = true;
+        try {
+            $newPat = Patient::where('_id', $id)->update($updatedFields);
+            // TODO: update Audit Trail
             return response()->json(['msg' => 'updated'], 201);
         } catch (\Exception $e) {
             dd($e);
             return response()->json(['error' => 'Patient update Failed'], 403);
         }
+        
     }
 
     private function getPrefix($studyID, $siteID)

@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 
 use App\ValidationTrait;
 use Illuminate\Http\Request;
@@ -37,7 +37,30 @@ class VisitController extends Controller
     {
         $patient = Patient::where('_id', $id)->first();
         $visits = Visit::where('study_id', $patient->study_id)->with(['forms'])->get();
-        return response()->json($visits);
+        $newVisits = array();
+        foreach ($visits as  $v) {
+            $tempVisit = $v;
+            $exclusionForm = DB::select('select count(id) as cnt , dov from crf_exclusions WHERE patient_id = ? AND visit_id = ? ', [$patient->id, $v['id']] );
+            if ($exclusionForm[0]->cnt > 0) {
+                $tempVisit['dov'] = $exclusionForm[0]->dov;
+            }
+            $newForms = array();
+            foreach ($v['forms'] as $f) {
+                $newF = $f;
+                $values = DB::select('select count(id) as cnt, dov from crf_form_' . $f['id'] . ' Where visit_id = ? AND subject_id = ?', [$v['id'], $patient->id]);
+                if ($values[0]->cnt > 0) {
+                    $newF['isDone'] = true;
+                    $tempVisit['dov'] = $values[0]->dov;
+                } else {
+                    $newF['isDone'] = false;
+                }
+                //$newF['values'] = $values;
+                array_push($newForms, $newF);
+            }
+            $tempVisit['forms'] = $newForms;
+            array_push($newVisits, $tempVisit);
+        }
+        return response()->json($newVisits);
     }
 
     public function new(Request $request)
