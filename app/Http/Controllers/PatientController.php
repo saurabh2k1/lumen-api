@@ -101,7 +101,7 @@ class PatientController extends Controller
         try {
             $newPat = Patient::where('_id', $id)->update($updatedFields);
             // TODO: update Audit Trail
-            return response()->json(['msg' => 'updated'], 201);
+            return response()->json(['msg' => 'Patient Details Updated'], 201);
         } catch (\Exception $e) {
             dd($e);
             return response()->json(['error' => 'Patient update Failed'], 403);
