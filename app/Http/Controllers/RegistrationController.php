@@ -65,7 +65,7 @@ class RegistrationController extends BaseController
             }
         }
     }
-
+ 
     private function createUser($details)
     {
         $user = Auth::user();

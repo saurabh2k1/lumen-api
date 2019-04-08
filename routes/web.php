@@ -121,6 +121,7 @@ $router->group(
             $router->get('/{id}/roles', 'UserController@getUserRoles');
             $router->post('/{id}/roles/assign/{roleId}', 'UserController@assignRole');
             $router->post('/{id}/roles/revoke/{roleId}', 'UserController@revokeRole');
+            $router->post('/update/{userId}', 'UserController@updateUser');
             $router->get('/', 'UserController@getAllUsers');
 
             
@@ -164,6 +165,7 @@ $router->group(
             $router->post('/users/change-password', 'UserController@changePassword');
             $router->get('/users/{userId}', 'UserController@getUserById');
             $router->post('/users/{userId}', 'UserController@updateUserByUUID');
+            
             // $router->get('/site', 'UserController@getUserSite');
             $router->get('/site', 'SiteController@getMySite');
             $router->get('/site/studies', 'SiteController@getSiteStudy');

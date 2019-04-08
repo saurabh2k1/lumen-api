@@ -7,6 +7,7 @@ use App\ValidationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Site;
 
 class UserController extends Controller
 {
@@ -20,7 +21,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function getUserById(Request $request, $userId)
+    public function getUserById( $userId)
     {
         if (!$userId) {
             throw new \Exception('There was a problem retrieving the user.');
@@ -28,7 +29,7 @@ class UserController extends Controller
 
         $this->isValidUserID($userId);
 
-        $user = User::where('_id', $userId)->first();
+        $user = User::where('_id', $userId)->with(['role', 'site'])->first();
 
         return response()->json($user);
     }
@@ -55,6 +56,25 @@ class UserController extends Controller
     public function getAllUsers()
     {
         return User::with(['role','site'])->get();
+    }
+
+
+    /**
+     * Update any user by admin
+     */
+    public function updateUser(Request $request, $userId) {
+        $input = $request->all();
+        $site = Site::where('_id', $input['site_id'])->first();
+        $user = User::where('_id', $userId)->first();
+        $user->first_name = $input['first_name'];
+        $user->last_name = $input['last_name'];
+        $user->email = $input['email'];
+        $user->site_id = $site->id;
+        $user->role_id = $input['role_id'];
+        $user->updated_by = Auth::user()->id;
+        $user->save();
+
+        return response('OK', 200);
     }
 
     /**
