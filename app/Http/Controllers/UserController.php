@@ -73,8 +73,7 @@ class UserController extends Controller
         $user->role_id = $input['role_id'];
         $user->updated_by = Auth::user()->id;
         $user->save();
-
-        return response('OK', 200);
+        return response()->json(['msg' => 'User Details Updated'], 201);
     }
 
     /**
@@ -148,6 +147,24 @@ class UserController extends Controller
 
         return response('OK', 200);
     }
+
+
+    /**
+     * Rseet the password of a user
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
+     */
+    public function resetPassword(Request $request)
+    {
+        $fields = $request->only(['userId', 'password']);
+        $user = User::where('_id', $fields['userId'])->first();
+        $user->password = Hash::make($fields['password']);
+        $user->updated_by = Auth::user()->id;
+        $user->save();
+        return response()->json(['msg' => 'User Password Updated'], 201);
+    }
+
  
     /**
      * Get the roles of a user

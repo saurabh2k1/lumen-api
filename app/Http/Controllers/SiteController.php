@@ -54,6 +54,13 @@ class SiteController extends Controller
         return response()->json(Site::all());
     }
 
+    public function getSite($siteId)
+    {
+        $site = Site::where('_id', $siteId)->first();
+        return response()->json($site, 201);
+       
+       
+    }
 
    public function getSiteStudy()
    {
