@@ -42,7 +42,36 @@ class SiteController extends Controller
             dd($e);
             return response()->json(['error' => 'Site Creation Failed'], 403);
         }
-         
+    }
+
+    /**
+     * Update Site
+     * 
+     * @param Request $request
+     * @param string $siteID
+     * @return StatusCode
+     */
+    public function updateSite(Request $request, $siteId)
+    {
+        $fields = $request->all();
+        $site = Site::where('_id', $siteId)->first();
+        if (!$site) {
+            return response()->json(['error' => 'Site not found'], 404);
+        }
+        try {
+            $site->update([
+                'name' => $fields['name'],
+                'code' => $fields['code'],
+                'department' => $fields['department'],
+                'contact_person' => $fields['contact_person'],
+                'address' => $fields['address'],
+                'updated_by' => Auth::user()->id,
+            ]);
+            return response()->json(['msg' => 'Site details updated.'], 201);
+        } catch (\Exception $e) {
+            dd($e);
+            return response()->json(['error' => 'Site Update Failed'], 403);
+        }
     }
 
     /**
@@ -58,8 +87,6 @@ class SiteController extends Controller
     {
         $site = Site::where('_id', $siteId)->first();
         return response()->json($site, 201);
-       
-       
     }
 
    public function getSiteStudy()

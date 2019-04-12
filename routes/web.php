@@ -133,6 +133,7 @@ $router->group(
             $router->get('/', 'SiteController@getSiteWithUsers');
             $router->post('/new', 'SiteController@createSite');
             $router->get('/get/{siteId}', 'SiteController@getSite');
+            $router->post('/update/{siteID}', 'SiteController@updateSite');
             
         });
 
@@ -140,6 +141,8 @@ $router->group(
             
             $router->get('/', 'StudyController@getStudies');
             $router->post('/new', 'StudyController@createStudy');
+            $router->get('/get/{studyId}', 'StudyController@getStudy');
+            $router->post('/update/{studyId}', 'StudyController@updateStudy');
 
         });
 

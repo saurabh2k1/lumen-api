@@ -53,11 +53,9 @@ class Study extends BaseModel
     }
 
     public function revokeSite($siteId){
-        $site = Site::where('id', $siteId);
-        if($this->hasSite($siteId)){
-            $this->sites()->detach(
-                $site->id
-            );
-        }
+        $site = Site::find($siteId);
+        // if($this->hasSite($siteId)){
+            $this->sites()->detach($site->id);
+        // }
     }
 }
