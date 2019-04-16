@@ -43,6 +43,12 @@ class FormController extends Controller
         }
     }
 
+    /**
+     * Ger CRF Form Details 
+     *
+     * @param string $id
+     * @return Response
+     */
     public function get($id)
     {
         $forms = Form::where('_id', $id)->with(['study', 'visits'])->first();
@@ -52,6 +58,35 @@ class FormController extends Controller
         } else {
             return response()->json(['error' => 'Wrong parameters'], 404);
         }
+    }
+
+    /**
+     * Update CRF Form details
+     * 
+     * @param Request $request
+     * @param string $id
+     * @return Response
+     */
+    public function update(Request $request, $id)
+    {
+        $forms = Form::where('_id', $id)->first();
+        $data = $request->all();
+        try
+        {
+            $forms->update([
+                'name' => $data['name'],
+                'code' => $data['code'],
+            ]);
+            $visits = $forms->visits()->get();
+            $forms->visits()->detach($visits);
+            $visits = Visit::whereIn('_id', $request['visits'])->get();
+            $forms->visits()->attach($visits);
+            return response()->json(['msg' => 'Form updated'], 201);
+        } catch (\Exception $e) {
+            dd($e);
+            return response()->json(['error' => 'Form Update Failed'], 403);
+        }
+        
     }
 
     public function getForm($id)

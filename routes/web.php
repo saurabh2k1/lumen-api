@@ -50,11 +50,10 @@ $router->group(
     $router->post('visit/new', 'VisitController@new');
     $router->get('/visit/{id}', 'VisitController@getVisit');
     $router->post('/visit/update/{id}', 'VisitController@updateVisit');
-    $router->post('form/new', 'FormController@new');
-    $router->get('form/{id}', 'FormController@get');
+   
     $router->get('form/crf/{id}', 'FormController@getForm');
-    $router->post('form/crf', 'FormController@saveCRF');
-    $router->post('form/{id}/field', 'CrfFormController@new');
+    $router->post('cform/crf', 'FormController@saveCRF');
+    
     $router->get('forms/{id}', 'FormController@getAllForms');
     $router->post('/site/form/exclusion', 'SiteFormController@saveExclusion');
     $router->get('/site/form/exclusion/{id}', 'SiteFormController@getExclusion');
@@ -134,6 +133,14 @@ $router->group(
             $router->post('/new', 'SiteController@createSite');
             $router->get('/get/{siteId}', 'SiteController@getSite');
             $router->post('/update/{siteID}', 'SiteController@updateSite');
+            
+        });
+
+        $router->group(['prefix' => 'form', 'middleware' => ['role:admin']], function () use ($router) {
+            $router->post('/new', 'FormController@new');
+            $router->get('/{id}', 'FormController@get');
+            $router->post('/{id}', 'FormController@update');
+            $router->post('/field/{id}', 'CrfFormController@new');
             
         });
 
