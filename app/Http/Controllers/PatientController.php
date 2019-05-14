@@ -9,6 +9,7 @@ use Webpatser\Uuid\Uuid;
 use App\Patient;
 use App\Site;
 use App\Study;
+use App\User;
 use App\PatientAudit;
 use Carbon\Carbon;
 
@@ -32,7 +33,17 @@ class PatientController extends Controller
 
     public function getPatient($id)
     {
-        return response()->json(Patient::where('_id', $id)->with(['audits'])->first());
+        // return response()->json(Patient::where('_id', $id)->with(['audits'])->first());
+        $pat = Patient::where('_id', $id)->with(['audits'])->first();
+        $newAudit = array();
+        foreach($pat->audits as $audit) {
+            $newA = $audit;
+            $user = User::find($audit['updated_by']);
+            $newA['changedBy'] = $user->first_name . " " . $user->last_name;
+            array_push($newAudit, $newA);
+        }
+        $pat->audits = $newAudit;
+        return response()->json($pat);
     }
 
     public function getPatients($siteID, $studyID)
