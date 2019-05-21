@@ -124,7 +124,8 @@ class PatientController extends Controller
     {
         $siteCode = Site::where('id', $siteID)->value('code');
         $studyCode = Study::where('id', $studyID)->value('code');
-        return addslashes($studyCode . '/'. $siteCode);
+        // return addslashes($studyCode . '/'. $siteCode);
+        return $siteCode;
     }
 
     private function getNextPatID($study_id, $site_id)

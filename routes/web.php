@@ -60,6 +60,8 @@ $router->group(
     $router->get('/site/patient/{id}/visits', 'VisitController@getVisitByPatient');
     $router->get('/allstudies', 'StudyController@getAllStudies');
 
+    $router->post('/site/aeforms/new', 'AeformController@saveAE');
+
 
         /**
          *  Ensures that retrieving config is allowed with the correct app id

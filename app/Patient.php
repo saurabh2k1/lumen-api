@@ -36,11 +36,17 @@ class Patient extends BaseModel
     {
         return $this->hasOne('App\CrfExclusion');
     }
+
+    public function aeforms()
+    {
+        return $this->hasMany('App\Aeform');
+    }
+
     public static function boot()
-{
-    parent::boot();
-    self::creating(function ($model) {
-        $model->_id = (string) Uuid::generate(4);
-    });
-}
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->_id = (string) Uuid::generate(4);
+        });
+    }
 }
