@@ -59,8 +59,9 @@ $router->group(
     $router->get('/site/form/exclusion/{id}', 'SiteFormController@getExclusion');
     $router->get('/site/patient/{id}/visits', 'VisitController@getVisitByPatient');
     $router->get('/allstudies', 'StudyController@getAllStudies');
+    $router->post('/patient/addvisit', 'PatientVisitController@addVisit');
+    $router->get('/patient/getvisit/{patientID}/{visitID}', 'PatientVisitController@getVisit');
 
-    $router->post('/site/aeforms/new', 'AeformController@saveAE');
 
 
         /**

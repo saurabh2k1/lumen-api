@@ -117,40 +117,46 @@ class FormController extends Controller
                 $f['unit'] = $field['field_unit'];
                 $f['hasOption'] = $field['hasOption'];
                 $f['options'] = array();
+                $f['ngShow_field'] = $field['ngShow_field'];
+                $f['ngShow_value'] = $field['ngShow_value'];
                 if($field['hasOption']){
                     foreach ($field['options'] as $o) {
                         array_push($f['options'], array('value' => $o['option_value'], 'title' => $o['option_title']));
                     }
                 }
                 $f['validations'] = array();
-                // if($field['field_required']){
-                //     $v = array();
-                //     $v['name'] = 'required';
-                //     $v['validator'] = 'Validators.required';
-                //     $v['message'] = $field['field_title'] . ' Required!';
-                //     array_push($f['validations'], $v);
-                // }
-                // if($field['regex']){
-                //     $v = array();
-                //     $v['name'] = 'pattern';
-                //     $v['validator'] = "Validators.pattern('". $field['regex'] ."')";
-                //     $v['message'] = ' Wrong pattern!';
-                //     array_push($f['validations'], $v);
-                // }
-                // if($field['min']){
-                //     $v = array();
-                //     $v['name'] = 'minimum';
-                //     $v['validator'] = "Validators.min('". $field['min'] ."')";
-                //     $v['message'] = ' Value should be more than or equal to ' . $field['min'] ;
-                //     array_push($f['validations'], $v);
-                // }
-                // if($field['max']){
-                //     $v = array();
-                //     $v['name'] = 'maximum';
-                //     $v['validator'] = "Validators.max('". $field['max'] ."')";
-                //     $v['message'] = ' Value should be less than or equal to ' . $field['max'] ;
-                //     array_push($f['validations'], $v);
-                // }
+                if($field['field_required']){
+                    $v = array();
+                    $v['name'] = 'required';
+                    $v['validator'] = 'Validators.required';
+                    $v['message'] = $field['field_title'] . ' Required!';
+                    array_push($f['validations'], $v);
+                }
+                if($field['regex']){
+                    $v = array();
+                    $v['name'] = 'pattern';
+                    $v['value'] = $field['regex'];
+                    $v['validator'] = "Validators.pattern";
+                    $v['message'] = ' Wrong pattern!';
+                    array_push($f['validations'], $v);
+                }
+                if($field['min']){
+                    $v = array();
+                    $v['name'] = 'min';
+                    $v['value'] = $field['min'];
+                    $v['validator'] = "Validators.min";
+                    $v['message'] = ' Value should be more than or equal to ' . $field['min'] ;
+                    array_push($f['validations'], $v);
+                }
+                if($field['max']){
+                    $v = array();
+                    $v['name'] = 'max';
+                    $v['value'] = $field['max']; 
+                    $v['validator'] = "Validators.max";
+                    $v['message'] = ' Value should be less than or equal to ' . $field['max'] ;
+                    array_push($f['validations'], $v);
+                }
+                
                 array_push($formFields, $f);
             }
             $fbutton = array();

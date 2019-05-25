@@ -17,6 +17,7 @@ class CreateMedicalhistoryTable extends Migration
             $table->increments('id');
             $table->uuid('_id');
             $table->integer('patient_id')->unique();
+            $table->date('visit_date');
             $table->timestamps();
         });
     }
