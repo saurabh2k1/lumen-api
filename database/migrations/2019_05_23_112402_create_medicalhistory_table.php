@@ -16,10 +16,15 @@ class CreateMedicalhistoryTable extends Migration
         Schema::create('medicalhistory', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('_id');
-            $table->integer('patient_id')->unique();
+            $table->integer('study_id');
+            $table->integer('site_id');
+            $table->integer('patient_id');
             $table->date('visit_date');
             $table->timestamps();
+            $table->unique(['study_id', 'site_id', 'patient_id']);
         });
+
+
     }
 
     /**
@@ -30,5 +35,6 @@ class CreateMedicalhistoryTable extends Migration
     public function down()
     {
         Schema::dropIfExists('medicalhistory');
+        
     }
 }

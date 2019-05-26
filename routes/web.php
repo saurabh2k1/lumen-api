@@ -61,7 +61,8 @@ $router->group(
     $router->get('/allstudies', 'StudyController@getAllStudies');
     $router->post('/patient/addvisit', 'PatientVisitController@addVisit');
     $router->get('/patient/getvisit/{patientID}/{visitID}', 'PatientVisitController@getVisit');
-
+    $router->get('/getmedicalhistory/{patient_id}', 'MedicalhistoryController@getMedicalHistory');
+    $router->post('/getmedicalhistory', 'MedicalhistoryController@save');
 
 
         /**
