@@ -50,13 +50,16 @@ class VisitController extends Controller
             }
             if ($v['code'] == 'V1') {
                 $medical = Medicalhistory::where('patient_id', $patient->id)->first();
-                if ($medical->visit_date) {
-                    $tempVisit['medicalHistory'] = true; 
-                    $isDone = true;
-                    $started = true;
-                } else {
-                    $tempVisit['medicalHistory'] = false;
-                    $isDone = false;
+                if ($medical){
+
+                    if ($medical->visit_date) {
+                        $tempVisit['medicalHistory'] = true; 
+                        $isDone = true;
+                        $started = true;
+                    } else {
+                        $tempVisit['medicalHistory'] = false;
+                        $isDone = false;
+                    }
                 }
             }
             
