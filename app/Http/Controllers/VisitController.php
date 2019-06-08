@@ -10,6 +10,7 @@ use App\Patient;
 use App\Site;
 use App\Study;
 use App\Visit;
+use App\Medicalhistory;
 use Carbon\Carbon;
 
 class VisitController extends Controller
@@ -38,12 +39,27 @@ class VisitController extends Controller
         $patient = Patient::where('_id', $id)->first();
         $visits = Visit::where('study_id', $patient->study_id)->with(['forms'])->get();
         $newVisits = array();
+        
         foreach ($visits as  $v) {
             $tempVisit = $v;
+            $isDone = true;
+            $started = false;
             $exclusionForm = DB::select('select count(id) as cnt , dov from crf_exclusions WHERE patient_id = ? AND visit_id = ? ', [$patient->id, $v['id']] );
             if ($exclusionForm[0]->cnt > 0) {
                 $tempVisit['dov'] = $exclusionForm[0]->dov;
             }
+            if ($v['code'] == 'V1') {
+                $medical = Medicalhistory::where('patient_id', $patient->id)->first();
+                if ($medical->visit_date) {
+                    $tempVisit['medicalHistory'] = true; 
+                    $isDone = true;
+                    $started = true;
+                } else {
+                    $tempVisit['medicalHistory'] = false;
+                    $isDone = false;
+                }
+            }
+            
             $newForms = array();
             foreach ($v['forms'] as $f) {
                 $newF = $f;
@@ -51,13 +67,16 @@ class VisitController extends Controller
                 if ($values[0]->cnt > 0) {
                     $newF['isDone'] = true;
                     $tempVisit['dov'] = $values[0]->dov;
+                    $started = true;
                 } else {
                     $newF['isDone'] = false;
                 }
+                $isDone = $isDone && $newF['isDone'];
                 //$newF['values'] = $values;
                 array_push($newForms, $newF);
             }
             $tempVisit['forms'] = $newForms;
+            $tempVisit['isDone'] = $isDone;
             array_push($newVisits, $tempVisit);
         }
         return response()->json($newVisits);

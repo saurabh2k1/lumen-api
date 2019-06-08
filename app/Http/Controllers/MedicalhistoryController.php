@@ -24,7 +24,7 @@ class MedicalhistoryController extends Controller
         // $study = Study::where('_id', $input['study_id'])->first();
         $patient = Patient::where('_id', $patient_id)->first();
         $history = Medicalhistory::where('patient_id', $patient->id)
-        ->where('study_id', $patient->study_id)->where('site_id', $patient->site_id)
+        // ->where('study_id', $patient->study_id)->where('site_id', $patient->site_id)
         ->with('genmedical', 'opmedical', 'Medical')->first();
         return response()->json([$history ], 201);
     }

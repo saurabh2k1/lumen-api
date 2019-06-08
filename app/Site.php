@@ -25,6 +25,11 @@ class Site extends BaseModel
     {
         return $this->hasMany('App\Patient');
     }
+
+    public function aerecords()
+    {
+        return $this->hasMany('App\Aerecord');
+    }
     
 
 }

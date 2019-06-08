@@ -181,7 +181,7 @@ class FormController extends Controller
         $user = Auth::user();
         $valueArray = array($siteId, $subjectId, $visitId, date('Y-m-d', strtotime($request['dov'])));
 
-        try {
+        try { 
             $newFormSQL = "insert into crf_form_" . $formId . "( `site_id`, `subject_id`, `visit_id`, `dov` ";
             $qMark = "";
             foreach ($fields as $field) {

@@ -37,7 +37,10 @@ class Patient extends BaseModel
         return $this->hasOne('App\CrfExclusion');
     }
 
-    
+    public function aerecords()
+    {
+        return $this->hasMany('App\Aerecord');
+    }
 
     public static function boot()
     {

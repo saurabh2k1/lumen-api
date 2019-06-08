@@ -52,7 +52,7 @@ $router->group(
     $router->post('/visit/update/{id}', 'VisitController@updateVisit');
    
     $router->get('form/crf/{id}', 'FormController@getForm');
-    $router->post('cform/crf', 'FormController@saveCRF');
+    $router->post('form/crf', 'FormController@saveCRF');
     
     $router->get('forms/{id}', 'FormController@getAllForms');
     $router->post('/site/form/exclusion', 'SiteFormController@saveExclusion');
@@ -63,6 +63,12 @@ $router->group(
     $router->get('/patient/getvisit/{patientID}/{visitID}', 'PatientVisitController@getVisit');
     $router->get('/getmedicalhistory/{patient_id}', 'MedicalhistoryController@getMedicalHistory');
     $router->post('/getmedicalhistory', 'MedicalhistoryController@save');
+    $router->get('/patient/aerecords/{patID}', 'AerecordController@getByPatient');
+    $router->get('/site/aerecords/{siteID}', 'AerecordController@getBySite');
+    $router->get('aerecords', 'AerecordController@getAll');
+    $router->get('aerecords/{id}', 'AerecordController@getById');
+    $router->post('aerecords', 'AerecordController@new');
+
 
 
         /**
