@@ -15,6 +15,7 @@ use App\Visit;
 use App\Form;
 use App\User;
 use App\CrfForm;
+use App\CrfChange;
 use Carbon\Carbon;
 use Illuminate\Validation\Validator;
 
@@ -157,6 +158,13 @@ class FormController extends Controller
                     array_push($f['validations'], $v);
                 }
                 
+                if ($formValue){
+                    if ($formValue->isUpdated) {
+                        $f['changes'] = CrfChange::where('row_id', $formValue->id)->where('form_id', $forms->id)->where('field_code', $field['field_code'])->with('creator')->get();
+                    }
+                }
+               
+
                 array_push($formFields, $f);
             }
             $fbutton = array();
