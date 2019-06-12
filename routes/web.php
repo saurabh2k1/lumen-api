@@ -69,6 +69,7 @@ $router->group(
     $router->get('aerecords/{id}', 'AerecordController@getById');
     $router->post('aerecords', 'AerecordController@new');
     $router->post('crfchange', 'CrfChangeController@create');
+    $router->post('upload', 'FileController@saveFile');
 
 
 
