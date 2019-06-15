@@ -23,6 +23,8 @@ class Visit extends BaseModel
         return $this->belongsToMany(Form::class);
     }
 
+    
+
     public static function boot()
     {
         parent::boot();

@@ -7,3 +7,4 @@ Homestead.yaml
 .env
 clover.xml
 tests/coverage
+/public/app

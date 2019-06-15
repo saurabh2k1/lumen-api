@@ -21,9 +21,10 @@ class PatientVisitController extends Controller
         $visit = Visit::where('_id', $input['visit_id'])->first();
         $user = Auth::user(); 
         try {
-            $newPVisit = PatientVisit::create([
+            $newPVisit = PatientVisit::updateOrInsert([
                 'patient_id' => $patient->id,
-                'visit_id'   => $visit->id,
+                'visit_id'   => $visit->id],
+                [
                 'visit_date' => $input['visit_date'],
                 'isSkipped'  => $input['isSkipped'],
                 'comments'   => $input['comment'],

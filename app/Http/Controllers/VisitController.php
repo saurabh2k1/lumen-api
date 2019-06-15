@@ -44,23 +44,29 @@ class VisitController extends Controller
             $tempVisit = $v;
             $isDone = true;
             $started = false;
+            $tempVisit['fileDone'] = false;
             $exclusionForm = DB::select('select count(id) as cnt , dov from crf_exclusions WHERE patient_id = ? AND visit_id = ? ', [$patient->id, $v['id']] );
             if ($exclusionForm[0]->cnt > 0) {
                 $tempVisit['dov'] = $exclusionForm[0]->dov;
             }
+            if (DB::table('fileupload')->where('patient_id', $patient->id)->where('visit_id', $v['id'])->exists()) {
+                $tempVisit['fileDone'] = true;
+            }
+            $isDone = $isDone && $tempVisit['fileDone'];
             if ($v['code'] == 'V1') {
                 $medical = Medicalhistory::where('patient_id', $patient->id)->first();
                 if ($medical){
 
                     if ($medical->visit_date) {
                         $tempVisit['medicalHistory'] = true; 
-                        $isDone = true;
+                        
                         $started = true;
                     } else {
                         $tempVisit['medicalHistory'] = false;
-                        $isDone = false;
+                        
                     }
                 }
+                $isDone = $isDone && $tempVisit['medicalHistory'];
             }
             
             $newForms = array();
