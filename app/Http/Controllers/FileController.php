@@ -29,7 +29,8 @@ Class FileController extends Controller
             // Storage::put($fileName, File::get($file));
             
             $file->move('app', $fileName);
-            DB::table('fileupload')->updateOrInsert([
+            $obj = DB::table('fileupload')->updateOrInsert([
+                'study_id'   => $patient->study_id,
                 'patient_id' => $patient->id,
                 'visit_id'   => $visitID,
             ], [
@@ -38,16 +39,48 @@ Class FileController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
-            return response()->json(['status' => 'success', 'message' => 'File uploaded Successfully', 'filePath' => $fileName]);
+            return response()->json(['status' => 'success', 'message' => 'File uploaded Successfully', 'filePath' => $fileName, 'id' => $obj->id]);
         }
+    }
+
+    public function updateFile($id, Request $request)
+    {
+        $user = Auth::user();
+        if ($request->hasFile('file') && $request->file('file')->isValid()){
+            $file = $request->file('file');
+            $patient = Patient::where('_id', $request->input('patient_id'))->first();
+            $visitID = Visit::where('_id', $request->input('visit_id'))->value('id');
+            $fileName = $patient->prefix . '-' . str_pad($patient->id, 3, "0", STR_PAD_LEFT) . '-v' . $visitID. '.'.$file->getClientOriginalExtension();
+            $obj = DB::table('fileupload')->where('id', $id)->update(array(
+            'file'       => $fileName,
+            'created_by' => $user->id,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ));
+
+            DB::table('fileupload_change')->insert([
+                
+                'fileupload_id' => $id,
+                'study_id'   =>  $patient->study_id,
+                'visit_id'   =>  $visitID,
+                'patient_id' =>  $patient->id,
+                'updated_by' =>  $user->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            return response()->json(['status' => 'success', 'message' => 'File uploaded Successfully', 'filePath' => $fileName, 'id' => $id], 201);
+        }
+            return response()->json(['msg' => 'File not uploaded'.dd($request)], 404);
+
     }
 
     public function getFile($patient_id, $visitID)
     {
         $patient = Patient::where('_id', $patient_id)->first();
         $visitID = Visit::where('_id', $visitID)->value('id');
-        $details = DB::table('fileupload')->select('file', 'created_at')->where('patient_id', $patient->id)
+        $details = DB::table('fileupload')->select('id','file', 'created_at')->where('patient_id', $patient->id)
                 ->where('visit_id', $visitID)->first();
+        $details->changes = DB::table('fileupload_change')->where('fileupload_id', $details->id)->get();
         return response()->json($details);
     }
 }

@@ -70,11 +70,19 @@ $router->group(
     $router->post('aerecords', 'AerecordController@new');
     $router->post('crfchange', 'CrfChangeController@create');
     $router->post('upload', 'FileController@saveFile');
+    $router->post('upload/{id}', 'FileController@updateFile');
     $router->get('upload/{patient_id}/{VisitID}', 'FileController@getFile');
     $router->post('site/conco', 'ConcoController@new');
     $router->get('site/conco/{patient_id}', 'ConcoController@get');
     $router->get('dashboard/crfcount/{studyID}/{siteID}', 'DashboardController@crfCount');
+    
 
+    /**
+     * Api for Monitor group
+     */
+    $router->group(['prefix' => 'monitor'], function () use ($router){
+        $router->get('study/{study_id}/sites', 'SiteController@getSitesByStudy');
+    });
 
         /**
          *  Ensures that retrieving config is allowed with the correct app id
