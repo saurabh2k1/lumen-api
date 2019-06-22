@@ -97,5 +97,14 @@ class CrfFormController extends Controller
         }
     }
 
+    public static function getOptionValue($formId, $fieldCode, $value)
+    {
+        $crfField = CrfForm::where('form_id', $formId)->where('field_code', $fieldCode)->first();
+        if ($crfField->hasOption) {
+            return CrfFieldOption::where('crf_form_id', $crfField->id)->where('option_value', $value)->value('option_title');
+        }
+        return $value;
+    }
+
     
 }

@@ -80,7 +80,9 @@ Class FileController extends Controller
         $visitID = Visit::where('_id', $visitID)->value('id');
         $details = DB::table('fileupload')->select('id','file', 'created_at')->where('patient_id', $patient->id)
                 ->where('visit_id', $visitID)->first();
-        $details->changes = DB::table('fileupload_change')->where('fileupload_id', $details->id)->get();
+        $details->changes = DB::table('fileupload_change')->where('fileupload_id', $details->id)
+        ->join('users', 'fileupload_change.updated_by', '=', 'users.id' )
+        ->select('fileupload_change.created_at', 'users.first_name', 'users.last_name')->get();
         return response()->json($details);
     }
 }

@@ -160,7 +160,8 @@ class FormController extends Controller
                 
                 if ($formValue){
                     if ($formValue->isUpdated) {
-                        $f['changes'] = CrfChange::where('row_id', $formValue->id)->where('form_id', $forms->id)->where('field_code', $field['field_code'])->with('creator')->get();
+                        // $f['changes'] = CrfChange::where('row_id', $formValue->id)->where('form_id', $forms->id)->where('field_code', $field['field_code'])->with('creator')->get();
+                        $f['changes'] = CrfChange::getCChanges($forms->id, $formValue->id,$field['field_code'] );
                     }
                 }
                

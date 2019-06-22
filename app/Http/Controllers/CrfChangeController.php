@@ -47,8 +47,16 @@ class CrfChangeController extends Controller
         }
     }
 
-    public function getChanges($form_id, $row_id)
-    {
-        return response()->json(CrfChange::where('form_id', $form_id)->where('row_id', $row_id)->get());
-    }
+    // public static function getChanges($form_id, $row_id)
+    // {
+    //     $changes = CrfChange::where('form_id', $form_id)->where('row_id', $row_id)->get();
+    //     $newChanges = array();
+    //     foreach ($changes as $change) {
+    //        $temp = $change;
+    //        $temp['old_value'] = CrfFormController::getOptionValue($change['form_id'], $change['field_code'], $change['old_value']);
+    //        $temp['new_value'] = CrfFormController::getOptionValue($change['form_id'], $change['field_code'], $change['new_value']);
+    //        array_push($newChanges, $temp);
+    //     }
+    //     return response()->json($newChanges);
+    // }
 }
