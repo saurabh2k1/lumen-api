@@ -52,7 +52,7 @@ class AerecordController extends Controller
         $ae = $request->all();
         $user = Auth::user();
         $patient = Patient::where('_id', $ae['pat_id'])->first();
-        if (!$patient) {
+        if (!$patient) { 
             return response()->json(['msg'=> 'Patient not Found'], 404);
         }
         try {
@@ -62,10 +62,10 @@ class AerecordController extends Controller
                 'VISDAT' => date('Y-m-d', strtotime($ae['VISDAT'])),
                 'AETERM' => $ae['AETERM'],
                 'eventName' => $ae['eventName'],
-                'otherEventName' => isset($ae['otherEventName']) ? 'otherEventName' : null,
+                'otherEventName' => isset($ae['otherEventName']) ? $ae['otherEventName'] : null,
                 'AESTDATE' => date('Y-m-d', strtotime($ae['AESTDATE'])),
                 'AEONGO' => $ae['AEONGO'],
-                'AEENDAT' => $ae['AEONGO'] ? null :  $ae['AEENDAT'],
+                'AEENDAT' => $ae['AEONGO'] ? null :  date('Y-m-d', strtotime($ae['AEENDAT'])),
                 'AEOUT' => $ae['AEOUT'],
                 'AESEV' => $ae['AESEV'],
                 'AESER' => $ae['AESER'],

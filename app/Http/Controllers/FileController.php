@@ -29,17 +29,17 @@ Class FileController extends Controller
             // Storage::put($fileName, File::get($file));
             
             $file->move('app', $fileName);
-            $obj = DB::table('fileupload')->updateOrInsert([
+            $id = DB::table('fileupload')->insertGetId([
                 'study_id'   => $patient->study_id,
                 'patient_id' => $patient->id,
                 'visit_id'   => $visitID,
-            ], [
+            // ], [
                 'file'       => $fileName,
                 'created_by' => $user->id,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
-            return response()->json(['status' => 'success', 'message' => 'File uploaded Successfully', 'filePath' => $fileName, 'id' => $obj->id]);
+            return response()->json(['status' => 'success', 'message' => 'File uploaded Successfully', 'filePath' => $fileName, 'id' => $id]);
         }
     }
 
@@ -80,9 +80,13 @@ Class FileController extends Controller
         $visitID = Visit::where('_id', $visitID)->value('id');
         $details = DB::table('fileupload')->select('id','file', 'created_at')->where('patient_id', $patient->id)
                 ->where('visit_id', $visitID)->first();
-        $details->changes = DB::table('fileupload_change')->where('fileupload_id', $details->id)
-        ->join('users', 'fileupload_change.updated_by', '=', 'users.id' )
-        ->select('fileupload_change.created_at', 'users.first_name', 'users.last_name')->get();
+        if ($details)
+        {
+            $details->changes = DB::table('fileupload_change')->where('fileupload_id', $details->id)
+            ->join('users', 'fileupload_change.updated_by', '=', 'users.id' )
+            ->select('fileupload_change.created_at', 'users.first_name', 'users.last_name')->get();
+        }
+       
         return response()->json($details);
     }
 }
