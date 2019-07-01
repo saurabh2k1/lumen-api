@@ -75,13 +75,15 @@ $router->group(
     $router->post('site/conco', 'ConcoController@new');
     $router->get('site/conco/{patient_id}', 'ConcoController@get');
     $router->get('dashboard/crfcount/{studyID}/{siteID}', 'DashboardController@crfCount');
+    $router->get('dashboard/patientstatus/{siteID}/{studyID}', 'DashboardController@getPatientStatus');
     
 
     /**
      * Api for Monitor group
      */
-    $router->group(['prefix' => 'monitor'], function () use ($router){
+    $router->group(['prefix' => 'monitor', 'middleware' => ['role:monitor']], function () use ($router){
         $router->get('study/{study_id}/sites', 'SiteController@getSitesByStudy');
+        $router->get('site/{siteID}/summery', 'MonitorController@getSummery');
     });
 
         /**

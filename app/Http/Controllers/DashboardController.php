@@ -70,6 +70,28 @@ class DashboardController extends Controller
         $response['updated_at'] = date('d-M-Y H:i:s');
         $response['AECount'] = $AECount;
         $response['SAE'] = $SAECount;
-        return response()->json($response, 201);
+        return response()->json($response);
+    }
+
+    public function getPatientStatus( $siteID, $studyID)
+    {
+        $study_id = Study::where('_id', $studyID)->value('id');
+        $site_id = Site::where('_id', $siteID)->value('id');
+        $patients = Patient::where('study_id', $study_id)->where('site_id', $site_id)->with('exclusion')->get();
+        $response = array();
+        foreach ($patients as $p) {
+            $temp['pat_id'] = $p->pat_id;
+            $temp['prefix'] = $p->prefix;
+            $temp['initials'] = $p->initials;
+            $temp['status'] = 'Enrolled';
+            if ($p->exclusion->exclusion !== 1) {
+                $temp['status'] = 'Screen Failure';
+            }
+            //test for withdrawn
+            // test for lost to follow-up
+            //test for completed
+            \array_push($response, $temp);
+        }
+        return response()->json($response);
     }
 }

@@ -67,7 +67,7 @@ class AuthController extends BaseController
             'last_name' => $this->guard()->user()->last_name,
             'email' => $this->guard()->user()->email,
             'role' => $this->guard()->user()->role()->value('name'),
-            //'user' => $this->guard()->user(),
+            'user' => $this->guard()->user(),
             // 'user' => User::where('_id', $userId)->with('role')->get(),
         ])->header('Authorization', sprintf('Bearer %s', $token));
     }

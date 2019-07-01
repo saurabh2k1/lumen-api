@@ -26,4 +26,4 @@ class ServerHeader
 
         return $response;
     }
-}
+} 
