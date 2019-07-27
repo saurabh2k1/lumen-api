@@ -45,7 +45,23 @@ class AuthController extends BaseController
     public function refresh()
     {
         // Refreshed token oken comes as an auth header
+        
         return response()->json();
+    }
+
+    public function refresh1()
+    {
+        $startTime = date("Y-m-d H:i:s");
+        $adding = '+' . $this->guard()->factory()->getTTL() . ' minutes';
+        $token = $this->guard()->refresh();
+        // date('Y-m-d H:i:s',strtotime($adding,strtotime($startTime)));
+        $expires = $this->guard()->factory()->getTTL();
+        return response()->json([
+            'token' => $token,
+            'token_type' => 'bearer',
+            'expires' => $expires,
+
+        ])->header('Authorization', sprintf('Bearer %s', $token));
     }
 
     /**
@@ -59,16 +75,16 @@ class AuthController extends BaseController
     {
         $userId = Auth::user()->_id;
         return response()->json([
-            '_id' => $userId,
+            // '_id' => $userId,
             'token' => $token,
             'token_type' => 'bearer',
-            'expires' => $this->guard()->factory()->getTTL() * 60,
-            'first_name' => $this->guard()->user()->first_name,
-            'last_name' => $this->guard()->user()->last_name,
-            'email' => $this->guard()->user()->email,
+            'expires' => $this->guard()->factory()->getTTL(),
+            // 'first_name' => $this->guard()->user()->first_name,
+            // 'last_name' => $this->guard()->user()->last_name,
+            // 'email' => $this->guard()->user()->email,
             'role' => $this->guard()->user()->role()->value('name'),
             'user' => $this->guard()->user(),
-            // 'user' => User::where('_id', $userId)->with('role')->get(),
+            
         ])->header('Authorization', sprintf('Bearer %s', $token));
     }
 

@@ -80,6 +80,7 @@ class DashboardController extends Controller
         $patients = Patient::where('study_id', $study_id)->where('site_id', $site_id)->with('exclusion')->get();
         $response = array();
         foreach ($patients as $p) {
+            $temp['_id'] = $p->_id;
             $temp['pat_id'] = $p->pat_id;
             $temp['prefix'] = $p->prefix;
             $temp['initials'] = $p->initials;

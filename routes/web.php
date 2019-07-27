@@ -186,6 +186,10 @@ $router->group(
             $router->post('/refresh', 'AuthController@refresh');
         });
 
+        $router->group(['middleware' => ['auth']], function () use ($router) {
+            $router->post('/refresh1', 'AuthController@refresh1');
+        });
+
         /**
          * Authenticated Routes
          */
